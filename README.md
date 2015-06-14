@@ -14,6 +14,8 @@ Valid options are:
 * `--ignore <regex>`	Regular expression describing function names to be ignored
 * `--root <function>`	Select the function to use as root node of the graph
 
+Any other arguments are treated as input files. If no input files are given, input is expected on stdin.
+
 ## License
 This program is free software. It comes without any warranty, to
 the extent permitted by applicable law. You can redistribute it
