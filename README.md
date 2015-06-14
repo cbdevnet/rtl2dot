@@ -1,5 +1,5 @@
 # rtl2dot
-Convert gcc RTL dumps to call graphs via GraphViz.
+Create C callgraphs from  gcc rtldumps via GraphViz.
 
 Based on [egypt](http://www.gson.org/egypt/egypt.html), rewritten in python with added support for configurable root nodes and omission by regex.
 May or may not work with C++ code.

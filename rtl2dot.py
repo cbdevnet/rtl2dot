@@ -1,4 +1,29 @@
 #!/usr/bin/env python
+#
+# Author: cbdev <cb@cbcdn.com>
+# ReferenceL https://github.com/cbdevnet/rtl2dot 
+#
+#This program is free software. It comes without any warranty, to
+#the extent permitted by applicable law. You can redistribute it
+#and/or modify it under the terms of the Do What The Fuck You Want
+#To Public License, Version 2, as published by Sam Hocevar and 
+#reproduced below.
+#
+#DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+#Version 2, December 2004 
+#
+#Copyright (C) 2004 Sam Hocevar <sam@hocevar.net> 
+#
+#	Everyone is permitted to copy and distribute verbatim or modified 
+#	copies of this license document, and changing it is allowed as long 
+#	as the name is changed. 
+#
+#DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+#TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+#
+#	0. You just DO WHAT THE FUCK YOU WANT TO.
+#
+
 import fileinput
 import re
 import sys
@@ -19,6 +44,13 @@ while i < len(sys.argv):
         i += 1
     elif sys.argv[i] == "--local":
         local = True
+    elif sys.argv[i] == "--help" or sys.argv[i] == "-h":
+        print "Generate call graphs of C programs from gcc rtldumps"
+        print "Options:"
+        print "\t--ignore <regex>\t\tFunctions to omit from the resulting graph"
+        print "\t--root <function>\t\tWhich function to use as root node (default: main)"
+        print "\t--local\t\t\t\tOmit functions not defined in the dump (eg. library calls)"
+        sys.exit(0)
     else:
         infiles.append(sys.argv[i])
     i+=1
