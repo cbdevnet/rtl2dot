@@ -6,8 +6,10 @@ import sys
 root = "main"
 ignore = None
 infiles = []
+local = False
 
 i = 1
+# There probably should be sanity checks here, but lets face it: If you cant pass arguments right, this isnt for you
 while i < len(sys.argv):
     if sys.argv[i] == "--ignore":
         ignore = re.compile(sys.argv[i + 1])
@@ -15,6 +17,8 @@ while i < len(sys.argv):
     elif sys.argv[i] == "--root":
         root = sys.argv[i + 1]
         i += 1
+    elif sys.argv[i] == "--local":
+        local = True
     else:
         infiles.append(sys.argv[i])
     i+=1
@@ -50,6 +54,9 @@ def dump(func):
         if calls[func][ref] == "call":
             # Invalidate the reference to avoid loops
             calls[func][ref] = None
+            if local and calls.get(ref, None) is None:
+                # non-local function
+                continue
             if ignore is None or re.match(ignore, ref) is None:
                 print '"%s" -> "%s";' % (func, ref)
                 dump(ref)
