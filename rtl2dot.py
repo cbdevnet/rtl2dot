@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Author: cbdev <cb@cbcdn.com>
-# ReferenceL https://github.com/cbdevnet/rtl2dot 
+# Reference: https://github.com/cbdevnet/rtl2dot 
 #
 #This program is free software. It comes without any warranty, to
 #the extent permitted by applicable law. You can redistribute it
