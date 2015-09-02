@@ -17,7 +17,7 @@ Valid options are:
 
 Any other arguments are treated as input files. If no input files are given, input is expected on stdin.
 
-**Example**
+### Example
 `./rtl2dot.py smtpd.expand --root core_loop --ignore "client_send|logprintf|common_*" --local | dot -Tsvg > smtpd.svg`
 
 ## License
