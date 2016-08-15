@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Author: cbdev <cb@cbcdn.com>
 # Reference: https://github.com/cbdevnet/rtl2dot 
@@ -45,11 +45,11 @@ while i < len(sys.argv):
     elif sys.argv[i] == "--local":
         local = True
     elif sys.argv[i] == "--help" or sys.argv[i] == "-h":
-        print "Generate call graphs of C programs from gcc rtldumps"
-        print "Options:"
-        print "\t--ignore <regex>\t\tFunctions to omit from the resulting graph"
-        print "\t--root <function>\t\tWhich function to use as root node (default: main)"
-        print "\t--local\t\t\t\tOmit functions not defined in the dump (eg. library calls)"
+        print("Generate call graphs of C programs from gcc rtldumps")
+        print("Options:")
+        print("\t--ignore <regex>\t\tFunctions to omit from the resulting graph")
+        print("\t--root <function>\t\tWhich function to use as root node (default: main)")
+        print("\t--local\t\t\t\tOmit functions not defined in the dump (eg. library calls)")
         sys.exit(0)
     else:
         infiles.append(sys.argv[i])
@@ -67,14 +67,14 @@ def enter(func):
     global current, calls
     current = func
     if calls.get(current, None) is not None:
-        print >> sys.stderr, "Ambiguous function name", current 
+        print("Ambiguous function name " + current, file=sys.stderr)
     else:
         calls[current] = {}
 
 def call(func, facility):
     global current, calls
     if calls[current].get(func, None) is not None and calls[current][func] != facility:
-        print >> sys.stderr, "Ambiguous calling reference to ", func
+        print("Ambiguous calling reference to " + func, file=sys.stderr)
     calls[current][func] = facility
 
 def dump(func):
@@ -90,7 +90,7 @@ def dump(func):
                 # non-local function
                 continue
             if ignore is None or re.match(ignore, ref) is None:
-                print '"%s" -> "%s";' % (func, ref)
+                print('"' + func + '" -> "' + ref + '";')
                 dump(ref)
 
 # Scan the rtl dump into the dict
@@ -108,6 +108,6 @@ for line in fileinput.input(infiles):
         # print "REF", re.match(symref, line).group("target")
         call(re.match(symref, line).group("target"), "ref")
 
-print "digraph callgraph {"
+print("digraph callgraph {")
 dump(root)
-print "}"
+print("}")
