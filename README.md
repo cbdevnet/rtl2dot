@@ -14,6 +14,7 @@ Valid options are:
 * `--ignore <regex>`	Regular expression describing function names to be ignored
 * `--root <function>`	Select the function to use as root node of the graph
 * `--local`		Ignore functions that are not defined within the rtl dump (most likely library functions) 
+* `--indirect`		Draw a dashed line when the address of a function is taken
 
 Any other arguments are treated as input files. If no input files are given, input is expected on stdin.
 

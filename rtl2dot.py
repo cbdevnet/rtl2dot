@@ -32,6 +32,7 @@ root = "main"
 ignore = None
 infiles = []
 local = False
+indirects = False
 
 i = 1
 # There probably should be sanity checks here, but lets face it: If you cant pass arguments right, this isnt for you
@@ -44,16 +45,19 @@ while i < len(sys.argv):
         i += 1
     elif sys.argv[i] == "--local":
         local = True
+    elif sys.argv[i] == "--indirect":
+        indirects = True
     elif sys.argv[i] == "--help" or sys.argv[i] == "-h":
         print("Generate call graphs of C programs from gcc rtldumps")
         print("Options:")
         print("\t--ignore <regex>\t\tFunctions to omit from the resulting graph")
         print("\t--root <function>\t\tWhich function to use as root node (default: main)")
         print("\t--local\t\t\t\tOmit functions not defined in the dump (eg. library calls)")
+        print("\t--indirect\t\t\tDraw a dashed line when the address of a function is taken")
         sys.exit(0)
     else:
         infiles.append(sys.argv[i])
-    i+=1
+    i += 1
 
 current = ""
 calls = {}
@@ -72,7 +76,7 @@ def enter(func):
         calls[current] = {}
 
 def call(func, facility):
-    global current, calls
+    global calls
     if calls[current].get(func, None) is not None and calls[current][func] != facility:
         print("Ambiguous calling reference to " + func, file=sys.stderr)
     calls[current][func] = facility
@@ -83,14 +87,15 @@ def dump(func):
         # edge node
         return
     for ref in calls[func].keys():
-        if calls[func][ref] == "call":
+        if calls[func][ref] == "call" or indirects:
+            style = "" if calls[func][ref] == "call" else ' [style="dashed"]'
             # Invalidate the reference to avoid loops
             calls[func][ref] = None
             if local and calls.get(ref, None) is None:
                 # non-local function
                 continue
             if ignore is None or re.match(ignore, ref) is None:
-                print('"' + func + '" -> "' + ref + '";')
+                print('"' + func + '" -> "' + ref + '"' + style + ';')
                 dump(ref)
 
 # Scan the rtl dump into the dict
