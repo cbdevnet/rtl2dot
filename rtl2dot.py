@@ -87,14 +87,17 @@ def dump(func):
         # edge node
         return
     for ref in calls[func].keys():
-        if calls[func][ref] == "call" or indirects:
+        if calls[func][ref] is not None:
             style = "" if calls[func][ref] == "call" else ' [style="dashed"]'
-            # Invalidate the reference to avoid loops
-            calls[func][ref] = None
             if local and calls.get(ref, None) is None:
                 # non-local function
                 continue
+            if not indirects and calls[func][ref] == "ref":
+                # indirect reference, but not requested
+                continue
             if ignore is None or re.match(ignore, ref) is None:
+                # Invalidate the reference to avoid loops
+                calls[func][ref] = None
                 print('"' + func + '" -> "' + ref + '"' + style + ';')
                 dump(ref)
 
